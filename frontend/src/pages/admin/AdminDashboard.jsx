@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Plus, Edit2, Play, Users, Trash2 } from 'lucide-react';
 
-const API_URL = (import.meta.env.VITE_BACKEND_URL || `http://${window.location.hostname}:5000`) + '/api';
+const rawUrl = import.meta.env.VITE_BACKEND_URL || `http://${window.location.hostname}:5000`;
+const API_URL = rawUrl.replace(/\/+$/, '') + '/api';
 
 export default function AdminDashboard() {
   const [rooms, setRooms] = useState([]);
