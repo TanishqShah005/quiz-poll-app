@@ -51,17 +51,17 @@ const PORT = process.env.PORT || 5000;
 const startServer = async () => {
   try {
     let mongoUri = process.env.MONGODB_URI;
-    
+
     // Check if we want to use local memory server for seamless demo
     if (!mongoUri || mongoUri.includes('127.0.0.1')) {
-       console.log('Starting in-memory MongoDB server for demo purposes...');
-       const mongod = await MongoMemoryServer.create();
-       mongoUri = mongod.getUri();
+      console.log('Starting in-memory MongoDB server for demo purposes...');
+      const mongod = await MongoMemoryServer.create();
+      mongoUri = mongod.getUri();
     }
 
     await mongoose.connect(mongoUri);
     console.log(`Connected to MongoDB`);
-    
+
     // Pre-seed default admin account
     try {
       const adminExists = await Admin.findOne({ email: 'admin@admin.com' });
@@ -69,10 +69,10 @@ const startServer = async () => {
         await Admin.create({ email: 'admin@admin.com', password: 'admin' });
         console.log('Pre-seeded default admin account: admin@admin.com / admin');
       }
-    } catch(err) {
+    } catch (err) {
       console.log('Could not seed admin', err);
     }
-    
+
     server.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });

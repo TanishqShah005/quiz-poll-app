@@ -45,11 +45,7 @@ export default function Home() {
           </button>
         </form>
 
-        <div className="mt-8 text-center">
-          <a href="/admin/login" className="text-sm text-slate-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
-            Are you a teacher/presenter? Login here.
-          </a>
-        </div>
+
       </div>
     </div>
   );
