@@ -4,7 +4,7 @@ import axios from 'axios';
 import { socket } from '../../utils/socket';
 import { Users, Play, SkipForward, BarChart2, StopCircle, ArrowLeft, Plus } from 'lucide-react';
 
-const API_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000/api';
+const API_URL = (import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000') + '/api';
 
 export default function AdminLiveControl() {
   const { roomId } = useParams();
