@@ -10,18 +10,20 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleAuth = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     try {
-      const res = await axios.post(`${API_URL}/admin/login`, { email, password });
+      const endpoint = isRegistering ? '/admin/register' : '/admin/login';
+      const res = await axios.post(`${API_URL}${endpoint}`, { email, password });
       localStorage.setItem('adminToken', res.data.token);
       navigate('/admin/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.response?.data?.message || (isRegistering ? 'Registration failed' : 'Login failed'));
     } finally {
       setLoading(false);
     }
@@ -40,7 +42,7 @@ export default function AdminLogin() {
 
         {error && <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-lg mb-6 text-sm">{error}</div>}
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleAuth} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
             <input
@@ -66,9 +68,18 @@ export default function AdminLogin() {
             className="btn-primary w-full py-3 mt-4"
             disabled={loading}
           >
-            {loading ? 'Authenticating...' : 'Login securely'}
+            {loading ? 'Authenticating...' : (isRegistering ? 'Create Account' : 'Login securely')}
           </button>
         </form>
+        
+        <div className="mt-6 text-center">
+          <button 
+            onClick={() => setIsRegistering(!isRegistering)}
+            className="text-sm text-brand-600 dark:text-brand-400 hover:underline"
+          >
+            {isRegistering ? 'Already have an account? Login' : "Don't have an account? Register"}
+          </button>
+        </div>
       </div>
     </div>
   );
