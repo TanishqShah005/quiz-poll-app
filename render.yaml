@@ -3,7 +3,7 @@ services:
     name: quizpoll-backend
     env: node
     rootDir: backend
-    buildCommand: npm install
+    buildCommand: cd ../frontend && npm install && npm run build && cd ../backend && npm install
     startCommand: npm start
     envVars:
       - key: NODE_ENV
