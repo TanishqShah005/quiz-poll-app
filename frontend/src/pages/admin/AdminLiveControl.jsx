@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { socket } from '../../utils/socket';
-import { Users, Play, SkipForward, BarChart2, StopCircle, ArrowLeft, Plus, Monitor } from 'lucide-react';
+import { Users, Play, SkipForward, BarChart2, StopCircle, ArrowLeft, Plus, Monitor, Edit2, Trash2 } from 'lucide-react';
 import QRCode from 'react-qr-code';
 
 const rawUrl = import.meta.env.VITE_BACKEND_URL || 'https://quizpoll-backend.onrender.com';
@@ -18,6 +18,7 @@ export default function AdminLiveControl() {
   
   // Question form
   const [showAddQ, setShowAddQ] = useState(false);
+  const [editingQId, setEditingQId] = useState(null);
   const [qType, setQType] = useState('poll');
   const [qText, setQText] = useState('');
   const [qOptions, setQOptions] = useState([{ id: '1', text: '' }, { id: '2', text: '' }]);
@@ -128,23 +129,51 @@ export default function AdminLiveControl() {
     setQOptions([...qOptions, { id: (qOptions.length + 1).toString(), text: '' }]);
   };
 
+  const handleEditQuestion = (q) => {
+    setQType(q.type || 'poll');
+    setQText(q.text);
+    setQOptions(q.options && q.options.length > 0 ? q.options : [{ id: '1', text: '' }, { id: '2', text: '' }]);
+    setQCorrect(q.correctAnswer || '1');
+    setEditingQId(q._id);
+    setShowAddQ(true);
+  };
+
+  const handleDeleteQuestion = async (qId) => {
+    if (!window.confirm("Are you sure you want to delete this question?")) return;
+    try {
+      await axios.delete(`${API_URL}/admin/rooms/${roomId}/questions/${qId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchRoom();
+    } catch (err) {
+      alert("Error deleting question");
+    }
+  };
+
   const saveQuestion = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${API_URL}/admin/rooms/${roomId}/questions`, {
+      const payload = {
         type: qType,
         text: qText,
         options: qOptions.filter(o => o.text.trim() !== ''),
         correctAnswer: qType === 'quiz' ? qCorrect : undefined,
         timeLimit: 30
-      }, { headers: { Authorization: `Bearer ${token}` }});
+      };
+
+      if (editingQId) {
+        await axios.put(`${API_URL}/admin/rooms/${roomId}/questions/${editingQId}`, payload, { headers: { Authorization: `Bearer ${token}` }});
+      } else {
+        await axios.post(`${API_URL}/admin/rooms/${roomId}/questions`, payload, { headers: { Authorization: `Bearer ${token}` }});
+      }
       
       setShowAddQ(false);
+      setEditingQId(null);
       setQText('');
       setQOptions([{ id: '1', text: '' }, { id: '2', text: '' }]);
       fetchRoom();
     } catch (err) {
-      alert("Error adding question");
+      alert("Error saving question");
     }
   };
 
@@ -183,13 +212,28 @@ export default function AdminLiveControl() {
         <div className="w-80 border-r border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/30 overflow-y-auto hidden md:block">
           <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center sticky top-0 bg-white/90 dark:bg-slate-800/90 backdrop-blur z-10">
             <h2 className="font-bold text-slate-900 dark:text-white">Questions ({room.questions.length})</h2>
-            {room.status === 'waiting' && <button onClick={() => setShowAddQ(!showAddQ)} className="p-1 hover:bg-slate-700 rounded text-brand-400"><Plus size={18}/></button>}
+            {room.status === 'waiting' && (
+              <button 
+                onClick={() => { setShowAddQ(!showAddQ); setEditingQId(null); setQText(''); setQOptions([{id:'1',text:''},{id:'2',text:''}]); }} 
+                className="p-1 hover:bg-slate-700 rounded text-brand-400"
+              >
+                <Plus size={18}/>
+              </button>
+            )}
           </div>
           <div className="p-2 space-y-2">
             {room.questions.map((q, idx) => (
-              <div key={q._id} className={`p-3 rounded-lg border ${room.currentQuestionIndex === idx ? 'bg-brand-100 dark:bg-brand-500/20 border-brand-500' : 'bg-white dark:bg-slate-800/50 border-slate-200 dark:border-slate-700'}`}>
-                <div className="text-xs text-brand-600 dark:text-brand-400 font-bold uppercase mb-1 drop-shadow-sm dark:drop-shadow-md">
-                  {q.type} • Q{idx + 1}
+              <div key={q._id} className={`p-3 rounded-lg border group relative ${room.currentQuestionIndex === idx ? 'bg-brand-100 dark:bg-brand-500/20 border-brand-500' : 'bg-white dark:bg-slate-800/50 border-slate-200 dark:border-slate-700'}`}>
+                <div className="flex justify-between items-start">
+                  <div className="text-xs text-brand-600 dark:text-brand-400 font-bold uppercase mb-1 drop-shadow-sm dark:drop-shadow-md">
+                    {q.type} • Q{idx + 1}
+                  </div>
+                  {room.status === 'waiting' && (
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                       <button onClick={(e) => { e.stopPropagation(); handleEditQuestion(q); }} className="text-slate-400 hover:text-brand-500"><Edit2 size={14}/></button>
+                       <button onClick={(e) => { e.stopPropagation(); handleDeleteQuestion(q._id); }} className="text-slate-400 hover:text-red-500"><Trash2 size={14}/></button>
+                    </div>
+                  )}
                 </div>
                 <div className="text-sm line-clamp-2">{q.text}</div>
               </div>
@@ -201,7 +245,7 @@ export default function AdminLiveControl() {
         <div className="flex-1 overflow-y-auto p-4 md:p-8 relative">
           {showAddQ && room.status === 'waiting' ? (
             <div className="max-w-xl mx-auto card">
-              <h2 className="text-xl font-bold mb-4">Add Question</h2>
+              <h2 className="text-xl font-bold mb-4">{editingQId ? 'Edit Question' : 'Add Question'}</h2>
               <form onSubmit={saveQuestion} className="space-y-4">
                 <div className="flex gap-4 mb-4">
                   <button type="button" onClick={() => setQType('poll')} className={`flex-1 py-2 rounded-lg border text-sm font-bold ${qType === 'poll' ? 'border-brand-500 bg-brand-500/20 text-white' : 'border-slate-700 text-slate-400'}`}>Poll</button>
@@ -228,8 +272,8 @@ export default function AdminLiveControl() {
                 </div>
                 
                 <div className="flex gap-4 mt-6">
-                  <button type="submit" className="btn-primary flex-1">Save Question</button>
-                  <button type="button" onClick={() => setShowAddQ(false)} className="btn-secondary">Cancel</button>
+                  <button type="submit" className="btn-primary flex-1">{editingQId ? 'Update Question' : 'Save Question'}</button>
+                  <button type="button" onClick={() => { setShowAddQ(false); setEditingQId(null); setQText(''); setQOptions([{id:'1',text:''},{id:'2',text:''}]); }} className="btn-secondary">Cancel</button>
                 </div>
               </form>
             </div>
