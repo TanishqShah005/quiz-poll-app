@@ -20,8 +20,8 @@ export default function Home() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-500/20 text-brand-500 mb-4">
             <Zap size={32} />
           </div>
-          <h1 className="text-3xl font-bold mb-2">Join a Live Session</h1>
-          <p className="text-slate-400">Enter the room code to participate.</p>
+          <h1 className="text-3xl font-bold mb-2 text-slate-900 dark:text-white">Join a Live Session</h1>
+          <p className="text-slate-500 dark:text-slate-400">Enter the room code to participate.</p>
         </div>
 
         <form onSubmit={handleJoin} className="space-y-4">
@@ -46,7 +46,7 @@ export default function Home() {
         </form>
 
         <div className="mt-8 text-center">
-          <a href="/admin/login" className="text-sm text-slate-500 hover:text-brand-400 transition-colors">
+          <a href="/admin/login" className="text-sm text-slate-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
             Are you a teacher/presenter? Login here.
           </a>
         </div>

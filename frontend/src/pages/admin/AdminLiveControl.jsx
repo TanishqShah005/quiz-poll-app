@@ -145,17 +145,17 @@ export default function AdminLiveControl() {
   return (
     <div className="flex flex-col h-screen overflow-hidden">
       {/* Header */}
-      <header className="border-b border-slate-700 bg-slate-800/80 p-4 flex justify-between items-center z-10 shrink-0">
+      <header className="border-b border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 p-4 flex justify-between items-center z-10 shrink-0">
         <div className="flex items-center gap-4">
-          <button onClick={() => navigate('/admin/dashboard')} className="p-2 hover:bg-slate-700 rounded-full transition-colors"><ArrowLeft size={20}/></button>
+          <button onClick={() => navigate('/admin/dashboard')} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors"><ArrowLeft size={20}/></button>
           <div>
-            <h1 className="text-xl font-bold">{room.name}</h1>
-            <div className="text-sm text-slate-400">Join Code: <span className="text-white font-mono font-bold">{room.roomCode}</span></div>
+            <h1 className="text-xl font-bold text-slate-900 dark:text-white">{room.name}</h1>
+            <div className="text-sm text-slate-500 dark:text-slate-400">Join Code: <span className="text-slate-900 dark:text-white font-mono font-bold">{room.roomCode}</span></div>
           </div>
         </div>
         <div className="flex gap-4 items-center">
-          <div className="flex items-center gap-2 bg-slate-700/50 px-3 py-1.5 rounded-full text-sm">
-            <Users size={16} className="text-brand-400"/>
+          <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-700/50 px-3 py-1.5 rounded-full text-sm text-slate-900 dark:text-white">
+            <Users size={16} className="text-brand-600 dark:text-brand-400"/>
             <span className="font-bold">{participantsCount}</span> Online
           </div>
         </div>
@@ -163,15 +163,15 @@ export default function AdminLiveControl() {
 
       <div className="flex-1 flex overflow-hidden">
         {/* Left Sidebar - Questions List */}
-        <div className="w-80 border-r border-slate-700 bg-slate-800/30 overflow-y-auto hidden md:block">
-          <div className="p-4 border-b border-slate-700 flex justify-between items-center sticky top-0 bg-slate-800/90 backdrop-blur z-10">
-            <h2 className="font-bold">Questions ({room.questions.length})</h2>
+        <div className="w-80 border-r border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/30 overflow-y-auto hidden md:block">
+          <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center sticky top-0 bg-white/90 dark:bg-slate-800/90 backdrop-blur z-10">
+            <h2 className="font-bold text-slate-900 dark:text-white">Questions ({room.questions.length})</h2>
             {room.status === 'waiting' && <button onClick={() => setShowAddQ(!showAddQ)} className="p-1 hover:bg-slate-700 rounded text-brand-400"><Plus size={18}/></button>}
           </div>
           <div className="p-2 space-y-2">
             {room.questions.map((q, idx) => (
-              <div key={q._id} className={`p-3 rounded-lg border ${room.currentQuestionIndex === idx ? 'bg-brand-500/20 border-brand-500' : 'bg-slate-800/50 border-slate-700'}`}>
-                <div className="text-xs text-brand-400 font-bold uppercase mb-1 drop-shadow-md">
+              <div key={q._id} className={`p-3 rounded-lg border ${room.currentQuestionIndex === idx ? 'bg-brand-100 dark:bg-brand-500/20 border-brand-500' : 'bg-white dark:bg-slate-800/50 border-slate-200 dark:border-slate-700'}`}>
+                <div className="text-xs text-brand-600 dark:text-brand-400 font-bold uppercase mb-1 drop-shadow-sm dark:drop-shadow-md">
                   {q.type} • Q{idx + 1}
                 </div>
                 <div className="text-sm line-clamp-2">{q.text}</div>
@@ -220,8 +220,8 @@ export default function AdminLiveControl() {
             <div className="max-w-3xl mx-auto flex flex-col h-full justify-center">
               {room.status === 'waiting' && (
                 <div className="text-center">
-                  <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-fuchsia-500 mb-6 font-mono tracking-widest">{room.roomCode}</div>
-                  <p className="text-xl text-slate-300 mb-8">Go to <span className="text-white font-bold">{window.location.origin}</span> and enter this code</p>
+                  <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-fuchsia-600 dark:from-brand-400 dark:to-fuchsia-500 mb-6 font-mono tracking-widest">{room.roomCode}</div>
+                  <p className="text-xl text-slate-600 dark:text-slate-300 mb-8">Go to <span className="text-slate-900 dark:text-white font-bold">{window.location.origin}</span> and enter this code</p>
                   
                   {room.questions.length > 0 ? (
                     <button onClick={handleStartSession} className="btn-primary text-xl px-12 py-4 flex items-center justify-center gap-3 mx-auto">
@@ -236,17 +236,17 @@ export default function AdminLiveControl() {
               {room.status === 'active' && room.currentQuestionIndex >= 0 && (
                 <div className="animate-fade-in-up">
                   <div className="mb-8">
-                    <span className="text-brand-400 font-bold uppercase tracking-wider text-sm mb-2 block">
+                    <span className="text-brand-600 dark:text-brand-400 font-bold uppercase tracking-wider text-sm mb-2 block">
                       Question {room.currentQuestionIndex + 1} of {room.questions.length}
                     </span>
-                    <h2 className="text-3xl md:text-5xl font-bold leading-tight">{room.questions[room.currentQuestionIndex].text}</h2>
+                    <h2 className="text-3xl md:text-5xl font-bold leading-tight text-slate-900 dark:text-white">{room.questions[room.currentQuestionIndex].text}</h2>
                   </div>
 
                   {/* Live Progress Bar indicator */}
                   <div className="mb-8 p-6 card flex flex-col gap-4">
-                     <div className="flex justify-between items-center border-b border-slate-700 pb-4">
-                        <span className="text-slate-300">Responses received</span>
-                        <span className="text-2xl font-bold bg-brand-500/20 text-brand-300 px-4 py-1 rounded-full">{responsesCount} / {participantsCount}</span>
+                     <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-4">
+                        <span className="text-slate-600 dark:text-slate-300">Responses received</span>
+                        <span className="text-2xl font-bold bg-brand-100 text-brand-600 dark:bg-brand-500/20 dark:text-brand-300 px-4 py-1 rounded-full">{responsesCount} / {participantsCount}</span>
                      </div>
                      
                      {room.showResults && liveStats.length > 0 && (
@@ -260,10 +260,10 @@ export default function AdminLiveControl() {
                             return (
                               <div key={stat.id} className="relative">
                                 <div className="flex justify-between text-sm mb-1 z-10 relative px-2">
-                                  <span className="font-medium drop-shadow-md">{stat.text} {isCorrect && '✅'}</span>
-                                  <span className="font-bold drop-shadow-md">{percent}% ({stat.count})</span>
+                                  <span className="font-medium drop-shadow-sm dark:drop-shadow-md text-slate-900 dark:text-white">{stat.text} {isCorrect && '✅'}</span>
+                                  <span className="font-bold drop-shadow-sm dark:drop-shadow-md text-slate-900 dark:text-white">{percent}% ({stat.count})</span>
                                 </div>
-                                <div className="h-8 bg-slate-800 rounded-lg overflow-hidden border border-slate-700 relative">
+                                <div className="h-8 bg-slate-200 dark:bg-slate-800 rounded-lg overflow-hidden border border-slate-300 dark:border-slate-700 relative">
                                   <div className={`absolute top-0 left-0 h-full transition-all duration-1000 ${isCorrect ? 'bg-green-500' : 'bg-brand-500'}`} style={{ width: `${percent}%` }}></div>
                                 </div>
                               </div>
@@ -277,8 +277,8 @@ export default function AdminLiveControl() {
 
               {room.status === 'finished' && (
                 <div className="text-center">
-                  <h2 className="text-4xl font-bold mb-4">Session Finished</h2>
-                  <p className="text-slate-400 mb-8">All questions have been completed.</p>
+                  <h2 className="text-4xl font-bold mb-4 text-slate-900 dark:text-white">Session Finished</h2>
+                  <p className="text-slate-500 dark:text-slate-400 mb-8">All questions have been completed.</p>
                   <button onClick={() => navigate('/admin/dashboard')} className="btn-secondary">Return to Dashboard</button>
                 </div>
               )}
@@ -289,8 +289,8 @@ export default function AdminLiveControl() {
 
       {/* Control Footer */}
       {room.status === 'active' && (
-        <footer className="border-t border-slate-700 bg-slate-800 p-4 flex justify-between items-center z-10 shrink-0">
-          <button onClick={handleEndSession} className="text-red-400 hover:text-red-300 flex items-center gap-2 transition-colors">
+        <footer className="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 flex justify-between items-center z-10 shrink-0">
+          <button onClick={handleEndSession} className="text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 flex items-center gap-2 transition-colors">
             <StopCircle size={20}/> End Session
           </button>
           

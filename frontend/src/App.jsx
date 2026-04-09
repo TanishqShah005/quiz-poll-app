@@ -5,6 +5,7 @@ import ParticipantRoom from './pages/participant/ParticipantRoom';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLiveControl from './pages/admin/AdminLiveControl';
+import ThemeToggle from './components/ThemeToggle';
 
 function App() {
   return (
@@ -14,6 +15,10 @@ function App() {
         <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-brand-600/20 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-fuchsia-600/20 rounded-full blur-[100px] pointer-events-none"></div>
         
+        <div className="absolute top-4 right-4 z-50">
+          <ThemeToggle />
+        </div>
+
         <div className="flex-1 z-10">
           <Routes>
             <Route path="/" element={<Home />} />

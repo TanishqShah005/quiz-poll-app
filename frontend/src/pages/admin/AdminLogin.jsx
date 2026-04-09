@@ -34,15 +34,15 @@ export default function AdminLogin() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-fuchsia-500/20 text-fuchsia-500 mb-4">
             <Lock size={32} />
           </div>
-          <h1 className="text-3xl font-bold mb-2">Workspace Admin</h1>
-          <p className="text-slate-400">Sign in to manage your spaces.</p>
+          <h1 className="text-3xl font-bold mb-2 text-slate-900 dark:text-white">Workspace Admin</h1>
+          <p className="text-slate-500 dark:text-slate-400">Sign in to manage your spaces.</p>
         </div>
 
         {error && <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-lg mb-6 text-sm">{error}</div>}
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">Email</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
             <input
               type="email"
               className="input-field"
@@ -52,7 +52,7 @@ export default function AdminLogin() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">Password</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Password</label>
             <input
               type="password"
               className="input-field"

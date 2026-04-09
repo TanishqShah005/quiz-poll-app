@@ -56,8 +56,8 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen p-8 max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-12">
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <button onClick={logout} className="text-slate-400 hover:text-white transition-colors">Logout</button>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Admin Dashboard</h1>
+        <button onClick={logout} className="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition-colors">Logout</button>
       </div>
 
       <div className="mb-8">
@@ -89,8 +89,8 @@ export default function AdminDashboard() {
         {rooms.map(room => (
           <div key={room._id} className="card group cursor-pointer hover:border-brand-500/50 transition-all flex flex-col" onClick={() => navigate(`/admin/room/${room._id}`)}>
             <div className="flex justify-between items-start mb-4">
-              <h3 className="text-xl font-bold line-clamp-1">{room.name}</h3>
-              <span className="bg-slate-800 text-slate-300 font-mono px-2 py-1 rounded text-sm mt-1">{room.roomCode}</span>
+              <h3 className="text-xl font-bold line-clamp-1 text-slate-900 dark:text-white">{room.name}</h3>
+              <span className="bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono px-2 py-1 rounded text-sm mt-1">{room.roomCode}</span>
             </div>
             
             <div className="flex items-center text-slate-400 text-sm gap-4 mb-6">
@@ -98,14 +98,14 @@ export default function AdminDashboard() {
               <span className="flex items-center gap-1"><Users size={14}/> {room.status}</span>
             </div>
 
-            <div className="mt-auto pt-4 border-t border-slate-700/50 flex justify-between items-center">
-              <span className="text-brand-400 font-medium group-hover:underline">Manage Session</span>
+            <div className="mt-auto pt-4 border-t border-slate-200 dark:border-slate-700/50 flex justify-between items-center">
+              <span className="text-brand-600 dark:text-brand-400 font-medium group-hover:underline">Manage Session</span>
               <Play className="text-brand-400" size={18} />
             </div>
           </div>
         ))}
         {rooms.length === 0 && !showCreate && (
-           <div className="col-span-full py-12 text-center text-slate-500 border-2 border-dashed border-slate-700 rounded-2xl">
+           <div className="col-span-full py-12 text-center text-slate-500 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl">
              No rooms created yet.
            </div>
         )}

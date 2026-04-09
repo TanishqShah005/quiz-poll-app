@@ -80,8 +80,8 @@ export default function ParticipantRoom() {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 text-center">
         <div className="card w-full max-w-md">
-          <h2 className="text-2xl font-bold mb-2">Session Ended</h2>
-          <p className="text-slate-400">Thanks for participating!</p>
+          <h2 className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">Session Ended</h2>
+          <p className="text-slate-500 dark:text-slate-400">Thanks for participating!</p>
         </div>
       </div>
     );
@@ -90,9 +90,9 @@ export default function ParticipantRoom() {
   if (status === 'waiting' || (status === 'active' && !question)) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4 text-center">
-        <Loader2 className="animate-spin text-brand-500 w-16 h-16 mb-6" />
-        <h2 className="text-2xl font-bold mb-2">Waiting for the Host</h2>
-        <p className="text-slate-400">Please wait until the next question is pushed.</p>
+        <Loader2 className="animate-spin text-brand-600 dark:text-brand-500 w-16 h-16 mb-6" />
+        <h2 className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">Waiting for the Host</h2>
+        <p className="text-slate-500 dark:text-slate-400">Please wait until the next question is pushed.</p>
       </div>
     );
   }
@@ -101,33 +101,33 @@ export default function ParticipantRoom() {
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-lg card animate-fade-in-up">
         <div className="mb-8">
-          <span className="inline-block px-3 py-1 bg-brand-500/20 text-brand-400 rounded-full text-xs font-bold uppercase tracking-wider mb-4">
+          <span className="inline-block px-3 py-1 bg-brand-100 text-brand-600 dark:bg-brand-500/20 dark:text-brand-400 rounded-full text-xs font-bold uppercase tracking-wider mb-4">
             {question.type === 'poll' ? 'Live Poll' : 'Live Quiz'}
           </span>
-          <h2 className="text-2xl md:text-3xl font-bold leading-tight">{question.text}</h2>
+          <h2 className="text-2xl md:text-3xl font-bold leading-tight text-slate-900 dark:text-white">{question.text}</h2>
         </div>
 
         <div className="space-y-4">
           {question.options.map((opt) => {
              const isAnswered = answeredId === opt.id;
-             let btnClass = "w-full text-left p-4 rounded-xl border-2 transition-all flex justify-between items-center ";
+             let btnClass = "w-full text-left p-4 rounded-xl border-2 transition-all flex justify-between items-center text-slate-900 dark:text-white ";
              
              if (showResults && resultsData) {
                // Showing results mode
                let isCorrect = question.type === 'quiz' && resultsData.correctAnswer === opt.id;
                let isWrongSelection = question.type === 'quiz' && isAnswered && !isCorrect;
                
-               if (isCorrect) btnClass += "border-green-500 bg-green-500/20 text-green-100";
-               else if (isWrongSelection) btnClass += "border-red-500 bg-red-500/20 text-red-100";
-               else btnClass += "border-slate-700 bg-slate-800/50 opacity-50";
+               if (isCorrect) btnClass += "border-green-500 bg-green-100 dark:bg-green-500/20 text-green-800 dark:text-green-100";
+               else if (isWrongSelection) btnClass += "border-red-500 bg-red-100 dark:bg-red-500/20 text-red-800 dark:text-red-100";
+               else btnClass += "border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/50 opacity-50";
 
              } else {
                // Voting mode
                if (answeredId) {
-                 if (isAnswered) btnClass += "border-brand-500 bg-brand-500/20 text-brand-100";
-                 else btnClass += "border-slate-700 bg-slate-800/50 opacity-50";
+                 if (isAnswered) btnClass += "border-brand-500 bg-brand-100 dark:bg-brand-500/20 text-brand-800 dark:text-brand-100";
+                 else btnClass += "border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/50 opacity-50";
                } else {
-                 btnClass += "border-slate-700 bg-slate-800/50 hover:border-slate-500 hover:bg-slate-700/50 cursor-pointer active:scale-[0.98]";
+                 btnClass += "border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 hover:border-slate-400 dark:hover:border-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700/50 cursor-pointer active:scale-[0.98]";
                }
              }
 
