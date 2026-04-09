@@ -5,7 +5,7 @@ import { socket } from '../../utils/socket';
 import { Users, Play, SkipForward, BarChart2, StopCircle, ArrowLeft, Plus, Monitor } from 'lucide-react';
 import QRCode from 'react-qr-code';
 
-const API_URL = (import.meta.env.VITE_BACKEND_URL || (import.meta.env.PROD ? '' : `http://${window.location.hostname}:5000`)) + '/api';
+const API_URL = (import.meta.env.VITE_BACKEND_URL || `http://${window.location.hostname}:5000`) + '/api';
 
 export default function AdminLiveControl() {
   const { roomId } = useParams();

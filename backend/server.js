@@ -39,9 +39,10 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'API is running' });
 });
 
-// Serve frontend
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
-app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, '../frontend', 'dist', 'index.html')));
+// Base Route
+app.get('/', (req, res) => {
+  res.send('API is running...');
+});
 
 // Socket.io
 socketHandlers(io);
