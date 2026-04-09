@@ -11,6 +11,7 @@ export default function ParticipantRoom() {
   const [showResults, setShowResults] = useState(false);
   const [resultsData, setResultsData] = useState(null);
   const [answeredId, setAnsweredId] = useState(null);
+  const [isConnected, setIsConnected] = useState(true);
   const [userId] = useState(() => {
     let id = localStorage.getItem('guestId');
     if (!id) {
@@ -48,11 +49,16 @@ export default function ParticipantRoom() {
     socket.on('session_ended', () => {
       setStatus('finished');
     });
+    
+    socket.on('disconnect', () => setIsConnected(false));
+    socket.on('connect', () => setIsConnected(true));
 
     return () => {
       socket.off('new_question');
       socket.off('show_results');
       socket.off('session_ended');
+      socket.off('disconnect');
+      socket.off('connect');
     };
   }, [roomCode, userId, navigate]);
 
@@ -99,6 +105,11 @@ export default function ParticipantRoom() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
+      {!isConnected && (
+        <div className="absolute top-0 left-0 w-full bg-red-500 text-white text-center py-2 text-sm font-semibold animate-pulse z-50">
+          Connection lost. Reconnecting...
+        </div>
+      )}
       <div className="w-full max-w-lg card animate-fade-in-up">
         <div className="mb-8">
           <span className="inline-block px-3 py-1 bg-brand-100 text-brand-600 dark:bg-brand-500/20 dark:text-brand-400 rounded-full text-xs font-bold uppercase tracking-wider mb-4">

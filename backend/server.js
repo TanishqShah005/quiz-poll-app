@@ -13,15 +13,17 @@ dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
+const allowedOrigin = process.env.FRONTEND_URL || '*';
+
 const io = new Server(server, {
   cors: {
-    origin: '*', // Allow all for demo purposes, restrict in prod
+    origin: allowedOrigin,
     methods: ['GET', 'POST', 'PUT', 'DELETE']
   }
 });
 
 // Middleware
-app.use(cors());
+app.use(cors({ origin: allowedOrigin }));
 app.use(express.json());
 
 // Routes

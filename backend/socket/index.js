@@ -129,6 +129,10 @@ export const socketHandlers = (io) => {
           await room.save();
           
           const q = room.questions[room.currentQuestionIndex];
+          if (!q) {
+            return callback({ error: 'No questions available in this room.' });
+          }
+
           const currentQuestion = {
             _id: q._id,
             type: q.type,
@@ -155,6 +159,10 @@ export const socketHandlers = (io) => {
           await room.save();
 
           const q = room.questions[index];
+          if (!q) {
+            return callback({ error: 'Question not found at the specified index.' });
+          }
+
           const currentQuestion = {
             _id: q._id,
             type: q.type,
@@ -179,10 +187,15 @@ export const socketHandlers = (io) => {
           room.showResults = true;
           await room.save();
           
-          const questionId = room.questions[room.currentQuestionIndex]._id;
+          const q = room.questions[room.currentQuestionIndex];
+          if (!q) {
+             return callback({ error: 'No active question.' });
+          }
+
+          const questionId = q._id;
           const responses = room.responses.filter(r => r.questionId.toString() === questionId.toString());
           
-          io.to(roomCode).emit('show_results', { responses, correctAnswer: room.questions[room.currentQuestionIndex].correctAnswer });
+          io.to(roomCode).emit('show_results', { responses, correctAnswer: q.correctAnswer });
           callback({ success: true });
         }
       } catch (ex) {

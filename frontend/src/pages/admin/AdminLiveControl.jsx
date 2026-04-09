@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { socket } from '../../utils/socket';
-import { Users, Play, SkipForward, BarChart2, StopCircle, ArrowLeft, Plus } from 'lucide-react';
+import { Users, Play, SkipForward, BarChart2, StopCircle, ArrowLeft, Plus, Monitor } from 'lucide-react';
 import QRCode from 'react-qr-code';
 
 const API_URL = (import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000') + '/api';
@@ -13,6 +13,7 @@ export default function AdminLiveControl() {
   const [participantsCount, setParticipantsCount] = useState(0);
   const [responsesCount, setResponsesCount] = useState(0);
   const [liveStats, setLiveStats] = useState([]);
+  const [isConnected, setIsConnected] = useState(true);
   
   // Question form
   const [showAddQ, setShowAddQ] = useState(false);
@@ -60,9 +61,14 @@ export default function AdminLiveControl() {
       calculateStats(responses);
     });
 
+    socket.on('disconnect', () => setIsConnected(false));
+    socket.on('connect', () => setIsConnected(true));
+
     return () => {
       socket.off('participant_update');
       socket.off('responses_update');
+      socket.off('disconnect');
+      socket.off('connect');
     };
   }, [room]);
 
@@ -155,12 +161,21 @@ export default function AdminLiveControl() {
           </div>
         </div>
         <div className="flex gap-4 items-center">
+          <button onClick={() => window.open(`/admin/present/${roomId}`, '_blank')} className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-4 py-1.5 rounded-full text-sm font-bold transition-colors shadow-sm">
+            <Monitor size={16} /> Present
+          </button>
           <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-700/50 px-3 py-1.5 rounded-full text-sm text-slate-900 dark:text-white">
             <Users size={16} className="text-brand-600 dark:text-brand-400"/>
             <span className="font-bold">{participantsCount}</span> Online
           </div>
         </div>
       </header>
+
+      {!isConnected && (
+        <div className="w-full bg-red-500 text-white text-center py-2 text-sm font-semibold animate-pulse z-50">
+          Connection lost. Reconnecting...
+        </div>
+      )}
 
       <div className="flex-1 flex overflow-hidden">
         {/* Left Sidebar - Questions List */}

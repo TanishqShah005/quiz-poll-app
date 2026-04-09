@@ -5,7 +5,9 @@ import ParticipantRoom from './pages/participant/ParticipantRoom';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLiveControl from './pages/admin/AdminLiveControl';
+import PresenterView from './pages/admin/PresenterView';
 import ThemeToggle from './components/ThemeToggle';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   return (
@@ -19,15 +21,18 @@ function App() {
           <ThemeToggle />
         </div>
 
-        <div className="flex-1 z-10">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/room/:roomCode" element={<ParticipantRoom />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/room/:roomId" element={<AdminLiveControl />} />
-          </Routes>
-        </div>
+        <ErrorBoundary>
+          <div className="flex-1 z-10">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/room/:roomCode" element={<ParticipantRoom />} />
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/admin/room/:roomId" element={<AdminLiveControl />} />
+              <Route path="/admin/present/:roomId" element={<PresenterView />} />
+            </Routes>
+          </div>
+        </ErrorBoundary>
       </div>
     </BrowserRouter>
   );

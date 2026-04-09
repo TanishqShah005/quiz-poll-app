@@ -57,7 +57,8 @@ export default function AdminDashboard() {
       });
       fetchRooms();
     } catch (err) {
-      alert("Error deleting room");
+      console.error(err);
+      alert(err.response?.status === 404 ? "Detailed endpoint not found on server. Did you restart the backend?" : "Error deleting room: " + (err.response?.data?.message || err.message));
     }
   };
 

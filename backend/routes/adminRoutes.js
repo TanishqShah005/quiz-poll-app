@@ -14,6 +14,11 @@ const generateToken = (id) => {
 // @route   POST /api/admin/register
 router.post('/register', async (req, res) => {
   const { email, password } = req.body;
+  
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required' });
+  }
+
   try {
     const adminExists = await Admin.findOne({ email });
     if (adminExists) {
@@ -33,6 +38,11 @@ router.post('/register', async (req, res) => {
 // @route   POST /api/admin/login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+  
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required' });
+  }
+
   try {
     const admin = await Admin.findOne({ email });
     if (admin && (await admin.matchPassword(password))) {
@@ -62,6 +72,11 @@ router.get('/rooms', protect, async (req, res) => {
 // @route   POST /api/admin/rooms
 router.post('/rooms', protect, async (req, res) => {
   const { name } = req.body;
+  
+  if (!name || !name.trim()) {
+    return res.status(400).json({ message: 'Room name is required' });
+  }
+
   try {
     // Generate 6-char random code
     const roomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
