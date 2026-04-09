@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { socket } from '../../utils/socket';
 import { Users, Play, SkipForward, BarChart2, StopCircle, ArrowLeft, Plus } from 'lucide-react';
+import QRCode from 'react-qr-code';
 
 const API_URL = (import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000') + '/api';
 
@@ -221,7 +222,13 @@ export default function AdminLiveControl() {
               {room.status === 'waiting' && (
                 <div className="text-center">
                   <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-fuchsia-600 dark:from-brand-400 dark:to-fuchsia-500 mb-6 font-mono tracking-widest">{room.roomCode}</div>
-                  <p className="text-xl text-slate-600 dark:text-slate-300 mb-8">Go to <span className="text-slate-900 dark:text-white font-bold">{window.location.origin}</span> and enter this code</p>
+                  <p className="text-xl text-slate-600 dark:text-slate-300 mb-6">Go to <span className="text-slate-900 dark:text-white font-bold">{window.location.origin}</span> and enter this code</p>
+                  
+                  <div className="mb-8 flex justify-center">
+                    <div className="bg-white p-4 rounded-2xl shadow-xl inline-block border-4 border-slate-100">
+                      <QRCode value={`${window.location.origin}/room/${room.roomCode}`} size={160} level="H" />
+                    </div>
+                  </div>
                   
                   {room.questions.length > 0 ? (
                     <button onClick={handleStartSession} className="btn-primary text-xl px-12 py-4 flex items-center justify-center gap-3 mx-auto">
