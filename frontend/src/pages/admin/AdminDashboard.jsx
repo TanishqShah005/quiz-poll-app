@@ -48,6 +48,19 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleDeleteRoom = async (e, roomId) => {
+    e.stopPropagation(); // Prevents triggering the card click
+    if (!window.confirm("Are you sure you want to permanently delete this room?")) return;
+    try {
+      await axios.delete(`${API_URL}/admin/rooms/${roomId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchRooms();
+    } catch (err) {
+      alert("Error deleting room");
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('adminToken');
     navigate('/admin/login');
@@ -100,7 +113,18 @@ export default function AdminDashboard() {
 
             <div className="mt-auto pt-4 border-t border-slate-200 dark:border-slate-700/50 flex justify-between items-center">
               <span className="text-brand-600 dark:text-brand-400 font-medium group-hover:underline">Manage Session</span>
-              <Play className="text-brand-400" size={18} />
+              <div className="flex gap-3">
+                <button 
+                  onClick={(e) => handleDeleteRoom(e, room._id)} 
+                  className="text-slate-400 hover:text-red-500 transition-colors"
+                  title="Delete Room"
+                >
+                  <Trash2 size={18} />
+                </button>
+                <button className="text-brand-600 dark:text-brand-400 transition-colors">
+                  <Play size={18} />
+                </button>
+              </div>
             </div>
           </div>
         ))}
