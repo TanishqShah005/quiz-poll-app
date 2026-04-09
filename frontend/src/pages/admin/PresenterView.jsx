@@ -5,7 +5,7 @@ import { socket } from '../../utils/socket';
 import { Users, BarChart2 } from 'lucide-react';
 import QRCode from 'react-qr-code';
 
-const rawUrl = import.meta.env.VITE_BACKEND_URL || `http://${window.location.hostname}:5000`;
+const rawUrl = import.meta.env.VITE_BACKEND_URL || 'https://quizpoll-backend.onrender.com';
 const API_URL = rawUrl.replace(/\/+$/, '') + '/api';
 
 export default function PresenterView() {
