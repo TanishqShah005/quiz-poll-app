@@ -8,7 +8,7 @@ import { protect } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+  return jwt.sign({ id }, process.env.JWT_SECRET || 'secret_demo_key_123', { expiresIn: '30d' });
 };
 
 // @route   POST /api/admin/register
