@@ -19,17 +19,15 @@ dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
-const allowedOrigin = process.env.FRONTEND_URL || '*';
-
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigin,
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE']
   }
 });
 
 // Middleware
-app.use(cors({ origin: allowedOrigin }));
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 // Routes
